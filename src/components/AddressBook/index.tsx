@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { User } from "../../Types/address";
 import UserEntry from "./UserEntry";
 import Table from '@mui/material/Table';
@@ -11,9 +11,12 @@ import Paper from '@mui/material/Paper';
 import { TablePagination } from '@mui/material';
 import SearchBar from "../SearchBar";
 import withLoading from "../../wrappers/withLoading";
+import { UserContext } from "../../contextApi/UserContext";
 
 const AddressBook = () => {
     const [users, setUsers] = useState<User[]>([]);
+    const [seluser, setSelUser] = useState<User | null>(null);
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(5);
     const [isLoading, setLoading] = useState(true);
@@ -21,6 +24,8 @@ const AddressBook = () => {
     const endIndex = startIndex + rowsPerPage;
     const paginatedUsers = users.slice(startIndex, endIndex);
     const TableBodyWithLoading = withLoading(TableBody);
+
+    
 
     const getAddresses = async () => {
         const data = await fetch(`https://randomuser.me/api/?results=100`)
